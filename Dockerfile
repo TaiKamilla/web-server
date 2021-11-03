@@ -3,7 +3,6 @@ ARG VARIANT=8.1-rc-apache-buster
 FROM php:${VARIANT}
 LABEL org.opencontainers.image.source https://github.com/taikamilla/web-server
 
-
 ## envs
 ENV INSTALL_DIR /var/www/html
 
@@ -16,8 +15,11 @@ RUN requirements="git-core curl wget build-essential openssl libssl-dev gnupg no
     && apt-get install -y $requirements $TOOLS\
     && apt-get update -yq
 
+## Install composer
 RUN curl -sS https://getcomposer.org/installer | php \
 && mv composer.phar /usr/local/bin/composer
+
+EXPOSE 80
 
 # CMD [ "/bin/bash", "-c", "cron && apache2-foreground" ]
 ENTRYPOINT [ "/bin/bash", "-c", "cron && apache2-foreground" ]
