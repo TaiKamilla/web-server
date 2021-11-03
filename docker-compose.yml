@@ -16,7 +16,7 @@ services:
 
         
     volumes:
-      - ..:/var/www/html:cached
+      - ../web-server/.:/var/www/html:cached
     init: true
 
     # Overrides default command so things don't shut down after the process ends.

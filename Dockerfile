@@ -20,6 +20,6 @@ RUN curl -sS https://getcomposer.org/installer | php \
 && mv composer.phar /usr/local/bin/composer
 
 # CMD [ "/bin/bash", "-c", "cron && apache2-foreground" ]
-ENTRYPOINT [ "/bin/bash", "-c", "touch /var/www/html/test && cron && apache2-foreground" ]
+ENTRYPOINT [ "/bin/bash", "-c", "cron && apache2-foreground" ]
 
 
