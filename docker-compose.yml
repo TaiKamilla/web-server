@@ -36,11 +36,13 @@ services:
     restart: unless-stopped
     volumes:
       - mariadb-data:/var/lib/mysql
+      - ../web-server/mariadb-data/grant.sql:/docker-entrypoint-initdb.d/grant.sql
     environment:
-      MYSQL_ROOT_PASSWORD: mariadb
-      MYSQL_DATABASE: shopware
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "yes"
+      # MYSQL_DATABASE: shopware
       MYSQL_USER: app
       MYSQL_PASSWORD: app
+    # ENTRYPOINT: [ "/bin/bash", "-c", "sleep 5 && mysql -u root -e 'GRANT ALL PRIVILEGES ON *.* TO app@%;'" ]
 
     # Add "forwardPorts": ["3306"] to **devcontainer.json** to forward MariaDB locally.
     # (Adding the "ports" property to this file will not forward from a Codespace.)
