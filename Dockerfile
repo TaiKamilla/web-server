@@ -11,7 +11,6 @@ ENV TOOLS "htop screen vim nano sudo mlocate"
 
 ## Install software
 RUN requirements="git-core curl wget build-essential openssl libssl-dev gnupg nodejs mariadb-client git cron libonig-dev mcrypt libpng-dev libmcrypt-dev libmcrypt4 libcurl3-dev libfreetype6 libjpeg62-turbo libjpeg62-turbo-dev libfreetype6-dev libicu-dev libpng-dev libxslt1-dev libzip-dev zip" \
-
     && apt-get update \
     && apt-get install -y $requirements $TOOLS\
     && apt-get update -yq
@@ -40,6 +39,12 @@ RUN apt-get autoremove -y \
 
 # Turn on mod_rewrite
 RUN a2enmod rewrite proxy_fcgi setenvif
+
+# Set PHP configuration
+RUN echo "memory_limit=4096M" > /usr/local/etc/php/conf.d/memory-limit.ini \
+    && echo 'max_execution_time = 3600' >> /usr/local/etc/php/conf.d/docker-php-maxexectime.ini \
+    && echo 'upload_max_filesize = 1024M' >> /usr/local/etc/php/conf.d/docker-php-uploadmaxfilesize.ini \
+    && echo 'opcache.validate_root = 1' >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
 
 EXPOSE 80
 
