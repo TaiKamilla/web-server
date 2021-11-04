@@ -2,17 +2,17 @@ version: '3.8'
 
 services: 
   app:
-    # image: ghcr.io/taikamilla/web-server:alpha
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        # Update 'VARIANT' to pick a version of PHP version: 8, 8.0, 7, 7.4, 7.3
-        # Append -bullseye or -buster to pin to an OS version.
-        # Use -bullseye variants on local arm64/Apple Silicon.
-        # VARIANT: "8-buster"
-        # Optional Node.js version
-        NODE_VERSION: "lts/*"
+    image: ghcr.io/taikamilla/web-server:alpha
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    #   args:
+    #     # Update 'VARIANT' to pick a version of PHP version: 8, 8.0, 7, 7.4, 7.3
+    #     # Append -bullseye or -buster to pin to an OS version.
+    #     # Use -bullseye variants on local arm64/Apple Silicon.
+    #     # VARIANT: "8-buster"
+    #     # Optional Node.js version
+    #     NODE_VERSION: "lts/*"
 
         
     volumes:
