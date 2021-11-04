@@ -11,6 +11,7 @@ ENV TOOLS "htop screen vim nano sudo mlocate"
 
 ## Install software
 RUN requirements="git-core curl wget build-essential openssl libssl-dev gnupg nodejs mariadb-client git cron libonig-dev mcrypt libpng-dev libmcrypt-dev libmcrypt4 libcurl3-dev libfreetype6 libjpeg62-turbo libjpeg62-turbo-dev libfreetype6-dev libicu-dev libpng-dev libxslt1-dev libzip-dev zip" \
+
     && apt-get update \
     && apt-get install -y $requirements $TOOLS\
     && apt-get update -yq
