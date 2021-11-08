@@ -27,7 +27,7 @@
 			"server": "mysql",
 			"previewLimit": 50,
 			"port": 3306,
-			"database": "shopware",
+			"database": "app",
 			"username": "app",
 			"password": "app"
 		}]
