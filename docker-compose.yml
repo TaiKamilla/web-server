@@ -22,7 +22,7 @@ services:
       - ../web-server/.:/var/www/html:cached
     init: true
 
-    user: www-data
+    # user: www-data
 
     # Uncomment the next line to use a non-root user for all processes.
     # user: vscode  
