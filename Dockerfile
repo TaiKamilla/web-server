@@ -10,10 +10,14 @@ ENV INSTALL_DIR /var/www/html
 ENV TOOLS "htop screen vim nano sudo mlocate"
 
 ## Install software
-RUN requirements="git-core curl wget build-essential openssl libssl-dev gnupg nodejs mariadb-client git cron libonig-dev mcrypt libpng-dev libmcrypt-dev libmcrypt4 libcurl3-dev libfreetype6 libjpeg62-turbo libjpeg62-turbo-dev libfreetype6-dev libicu-dev libpng-dev libxslt1-dev libzip-dev zip" \
+RUN requirements="git-core npm curl wget build-essential openssl libssl-dev gnupg mariadb-client git cron libonig-dev mcrypt libpng-dev libmcrypt-dev libmcrypt4 libcurl3-dev libfreetype6 libjpeg62-turbo libjpeg62-turbo-dev libfreetype6-dev libicu-dev libpng-dev libxslt1-dev libzip-dev zip" \
     && apt-get update \
     && apt-get install -y $requirements $TOOLS\
     && apt-get update -yq
+
+# Install nodejs
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash \
+    && apt-get install nodejs -yq 
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php \
@@ -26,6 +30,9 @@ RUN wget http://download.redis.io/redis-stable.tar.gz \
     && make \
     && make install
 
+# Configure libraries
+RUN docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/
+
 # Install libraries
 RUN libraries_to_install="bcmath gd intl mbstring mysqli opcache pdo_mysql soap xsl zip" \
     && docker-php-ext-install $libraries_to_install
@@ -36,6 +43,9 @@ RUN apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     && rm -rf /tmp/pear \
     && rm -Rf redis-stable redis-stable.tar.gz
+
+# Copy configs files
+# COPY apache/000-default.conf /etc/apache2/sites-available/000-default.conf
 
 # Turn on mod_rewrite
 RUN a2enmod rewrite proxy_fcgi setenvif
@@ -49,6 +59,6 @@ RUN echo "memory_limit=4096M" > /usr/local/etc/php/conf.d/memory-limit.ini \
 EXPOSE 80
 
 # CMD [ "/bin/bash", "-c", "cron && apache2-foreground" ]
-ENTRYPOINT [ "/bin/bash", "-c", "cron && apache2-foreground" ]
+ENTRYPOINT [ "/bin/bash", "-c", "cron && apache2-foreground; sleep infinity" ]
 
 
