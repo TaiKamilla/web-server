@@ -39,6 +39,7 @@ services:
       - ../web-server/mariadb-data/grant.sql:/docker-entrypoint-initdb.d/grant.sql
     environment:
       MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "yes"
+      MYSQL_DATABASE: app
       MYSQL_USER: app
       MYSQL_PASSWORD: app
     ports:
