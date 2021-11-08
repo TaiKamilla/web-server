@@ -1,34 +1,34 @@
-version: '3.8'
+version: "3.8"
 
-services: 
+networks:
+    app-net:
+
+services:
   app:
     image: ghcr.io/taikamilla/web-server:alpha
-    # build:
-    #   context: .
-    #   dockerfile: Dockerfile
-    #   args:
-    #     # Update 'VARIANT' to pick a version of PHP version: 8, 8.0, 7, 7.4, 7.3
-    #     # Append -bullseye or -buster to pin to an OS version.
-    #     # Use -bullseye variants on local arm64/Apple Silicon.
-    #     # VARIANT: "8-buster"
-    #     # Optional Node.js version
-    #     NODE_VERSION: "lts/*"
+    # image: app
+    # build: .
 
-        
+    ports:
+      - "80:80"
+    networks:
+      - app-net
+
+    # for debugging
+    #entrypoint: ["sh", "-c", "sleep infinity"]
+    # entrypoint: ["sh", "-c", "sleep 2073600"]
+
     volumes:
       - ../web-server/.:/var/www/html:cached
     init: true
 
-    # Overrides default command so things don't shut down after the process ends.
-    # command: [ "/bin/bash", "-c", "cron && apache2-foreground" ]
+    user: www-data
 
-    # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
-    network_mode: service:mysql
 
     # Uncomment the next line to use a non-root user for all processes.
-    # user: vscode
+    # user: vscode  
 
-    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally. 
+    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally.
     # (Adding the "ports" property to this file will not forward from a Codespace.)
 
   mysql:
@@ -39,13 +39,13 @@ services:
       - ../web-server/mariadb-data/grant.sql:/docker-entrypoint-initdb.d/grant.sql
     environment:
       MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "yes"
-      # MYSQL_DATABASE: shopware
       MYSQL_USER: app
       MYSQL_PASSWORD: app
-    # ENTRYPOINT: [ "/bin/bash", "-c", "sleep 5 && mysql -u root -e 'GRANT ALL PRIVILEGES ON *.* TO app@%;'" ]
-
-    # Add "forwardPorts": ["3306"] to **devcontainer.json** to forward MariaDB locally.
-    # (Adding the "ports" property to this file will not forward from a Codespace.)
-  
+    ports:
+            - "3306:3306"
+    depends_on:
+      - app
+    networks:
+      - app-net
 volumes:
   mariadb-data:

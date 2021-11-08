@@ -16,7 +16,7 @@ RUN requirements="git-core npm curl wget build-essential openssl libssl-dev gnup
     && apt-get update -yq
 
 # Install nodejs
-RUN curl -sL https://deb.nodesource.com/setup_17.x | bash \
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash \
     && apt-get install nodejs -yq 
 
 # Install composer
@@ -44,6 +44,9 @@ RUN apt-get autoremove -y \
     && rm -rf /tmp/pear \
     && rm -Rf redis-stable redis-stable.tar.gz
 
+# Copy configs files
+# COPY apache/000-default.conf /etc/apache2/sites-available/000-default.conf
+
 # Turn on mod_rewrite
 RUN a2enmod rewrite proxy_fcgi setenvif
 
@@ -56,6 +59,6 @@ RUN echo "memory_limit=4096M" > /usr/local/etc/php/conf.d/memory-limit.ini \
 EXPOSE 80
 
 # CMD [ "/bin/bash", "-c", "cron && apache2-foreground" ]
-ENTRYPOINT [ "/bin/bash", "-c", "cron && apache2-foreground" ]
+ENTRYPOINT [ "/bin/bash", "-c", "cron && apache2-foreground; sleep infinity" ]
 
 
